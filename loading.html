@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Galorem AI System Loading</title>
+  <link rel="stylesheet" href="loading.css">
+</head>
+<body>
+  <div class="fx-overlay"></div>
+
+  <div class="logo-wrapper">
+    <svg id="galorem-core" viewBox="0 0 500 500">
+      <circle id="core" cx="250" cy="250" r="35" />
+
+      <g class="pulse-rings">
+        <circle class="ring" cx="250" cy="250" r="80" />
+        <circle class="ring" cx="250" cy="250" r="120" />
+        <circle class="ring" cx="250" cy="250" r="160" />
+      </g>
+
+      <g class="nodes">
+        <circle class="node" cx="250" cy="50" r="4" />
+        <circle class="node" cx="450" cy="250" r="4" />
+        <circle class="node" cx="250" cy="450" r="4" />
+        <circle class="node" cx="50" cy="250" r="4" />
+      </g>
+
+      <g class="circuits">
+        <line class="circuit" x1="250" y1="250" x2="250" y2="50" />
+        <line class="circuit" x1="250" y1="250" x2="450" y2="250" />
+        <line class="circuit" x1="250" y1="250" x2="250" y2="450" />
+        <line class="circuit" x1="250" y1="250" x2="50" y2="250" />
+      </g>
+    </svg>
+
+    <h1 class="ai-title"><span class="glitch">GALOREM</span> <span class="ai">AI</span></h1>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="loading.js"></script>
+</body>
+</html>

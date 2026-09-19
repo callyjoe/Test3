@@ -1,0 +1,64 @@
+body {
+  background: #0e101c;
+  color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
+#drop-area {
+  border: 2px dashed #4fc3f7;
+  padding: 40px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  background: #1a1d2b;
+}
+
+#fileElem {
+  display: none;
+}
+
+.loader {
+  border: 8px solid #333;
+  border-top: 8px solid #4fc3f7;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin: 20px auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+textarea {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  margin-top: 10px;
+  background: #121420;
+  color: #eee;
+  border: 1px solid #4fc3f7;
+  border-radius: 5px;
+}
+
+button {
+  margin-top: 20px;
+  background: #4fc3f7;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}

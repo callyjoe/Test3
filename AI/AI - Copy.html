@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="AI.css" />
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="menu">
+              <img src="icons8-menu-100.png" />
+            </div>
+            <div class="logo">
+                <img src="chatbot.png" />
+                <div id="inner-text">
+                <h1>Galorem Ai</h1>
+                <p>Smart Study Platform</p>
+                </div>
+            </div>
+
+            
+
+            <div class="toogle">
+                <img src="cresent-moon.png" />
+            </div>
+        </nav>
+    </header>
+
+    <div class="overlay" id="overlay"></div>
+    <!-- Sidebar Menu -->
+<div class="sidebar" id="sidebar">
+  <div class="close-btn" id="closeBtn">&times;</div>
+  <ul>
+    <li><a href="AI.html">Home</a></li>
+    <li><a href="AI.html">Chat</a></li>
+    <li><a href="quiz.html">Quiz</a></li>
+    <li><a href="flashcards.html">Flashcards</a></li>
+    <li><a href="Additional/image_converter.html">Image Converter</a></li>
+    <li><a href="document.html">Document Upload</a></li>
+  </ul>
+</div>
+
+    <main>
+        <div class="heading">
+            
+            <h1>Welcome to Galorem AI</h1>
+            <p>Your intelligent companion for academic success. Ask questions,<br /> generate quizzes, create flashcards, and more.</p>
+        </div>
+
+        <div class="main-area">
+           <div class="chat-area">
+  <div class="chat-scroll-area" style="overflow-y: auto; flex: 1; padding-bottom: 1rem;">
+    <div class="chat-area-head">
+      <img src="icons8-chatbot-100.png" />
+      <h2>AI Chat Assistant</h2>
+      <img src="icons8-expand-48.png" id="expand-icon" />
+<img src="icons8-shrink-down-48.png" id="shrink-icon" style="display: none;" />
+    </div>
+    <p id="p-head">Ask me anything about your studies, get explanations, or request academic help</p>
+
+    <div class="chat">
+      <div id="ai-img">
+        <img src="icons8-chatbot-100.png" />
+      </div>
+      <div class="chat-box ai">
+        <p>Hello! I'm Galorem AI. How can I help you today?</p>
+         <p id="tip-text"></p>
+        <span class="timestamp">⏰AM/PM</span>
+      </div>
+    </div>
+
+    <div class="chat user-template" style="display: none">
+      <div class="chat-box user">
+        <p></p>
+        <span class="timestamp"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="input" id="input">
+  <form id="chat-form">
+    <div class="textarea-wrapper">
+      <textarea id="message" name="message" rows="3" placeholder="Ask me anything..."></textarea>
+      <button type="button" id="voice-input-btn" title="Click to speak">
+        🎤
+      </button>
+    </div>
+    <button type="submit">
+      <img src="icons8-send-96.png" />
+    </button>
+  </form>
+</div>
+
+</div>
+             
+        
+    </main>
+
+
+
+
+
+
+
+ <script type="module" src="script.js"></script>
+ <script src="music.js"></script>
+ 
+ <script>
+  let musicStarted = false;
+
+  document.getElementById("start-music").addEventListener("click", () => {
+    if (musicStarted) return;
+
+    const musicBox = document.getElementById("music-box");
+    const playlist = window.playlists.lofi; // ✅ Access global playlists
+    let currentTrackIndex = 0;
+
+    musicBox.innerHTML = `
+      <div class="music-player morph-in">
+        <h3 id="track-title">${playlist[currentTrackIndex].title}</h3>
+        <audio id="audio-player" autoplay src="${playlist[currentTrackIndex].src}"></audio>
+
+        <div class="progress-container">
+          <span id="current-time">0:00</span>
+          <input type="range" id="progress-bar" value="0" min="0" step="1" />
+          <span id="duration">0:00</span>
+        </div>
+
+        <div class="controls">
+          <img id="prev" src="icons8-rewind-button-round-64.png" title="Previous" />
+          <img id="play" src="icons8-pause-48.png" title="Pause" />
+          <img id="next" src="icons8-next-button-48.png" title="Next" />
+        </div>
+
+        <div class="volume-wrapper">
+          <input type="range" id="volume" min="0" max="1" step="0.01" value="0.7" />
+          <span id="volume-label">70%</span>
+        </div>
+      </div>
+    `;
+
+    const audio = document.getElementById("audio-player");
+    const progressBar = document.getElementById('progress-bar');
+    const currentTimeSpan = document.getElementById('current-time');
+    const durationSpan = document.getElementById('duration');
+    const volumeLabel = document.getElementById('volume-label');
+
+    function formatTime(time) {
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60).toString().padStart(2, '0');
+      return `${minutes}:${seconds}`;
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      progressBar.value = Math.floor(audio.currentTime);
+      currentTimeSpan.textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      progressBar.max = Math.floor(audio.duration);
+      durationSpan.textContent = formatTime(audio.duration);
+    });
+
+    progressBar.addEventListener('input', () => {
+      audio.currentTime = progressBar.value;
+    });
+
+    document.getElementById('volume').oninput = (e) => {
+      audio.volume = e.target.value;
+      volumeLabel.textContent = `${Math.round(e.target.value * 100)}%`;
+    };
+
+    document.getElementById('prev').onclick = () => {
+      currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+      updateTrack();
+    };
+
+    document.getElementById('next').onclick = () => {
+      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+      updateTrack();
+    };
+
+    document.getElementById('play').onclick = () => {
+      const playBtn = document.getElementById('play');
+      if (audio.paused) {
+        audio.play();
+        playBtn.src = "icons8-pause-48.png";
+        playBtn.title = "Pause";
+      } else {
+        audio.pause();
+        playBtn.src = "icons8-play-48.png";
+        playBtn.title = "Play";
+      }
+    };
+
+    function updateTrack() {
+      audio.src = playlist[currentTrackIndex].src;
+      audio.play();
+      document.getElementById('track-title').innerText = playlist[currentTrackIndex].title;
+      document.getElementById('play').src = "icons8-pause-48.png";
+      document.getElementById('play').title = "Pause";
+    }
+
+    audio.onended = () => {
+      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+      updateTrack();
+    };
+
+    musicStarted = true;
+  });
+</script>
+
+<script>
+  const expandBtn = document.getElementById('expand-icon');
+  const shrinkBtn = document.getElementById('shrink-icon');
+  const mainArea = document.querySelector('.main-area');
+
+  expandBtn.addEventListener('click', () => {
+    mainArea.classList.add('expanded');
+    expandBtn.style.display = 'none';
+    shrinkBtn.style.display = 'inline';
+  });
+
+  shrinkBtn.addEventListener('click', () => {
+    mainArea.classList.remove('expanded');
+    shrinkBtn.style.display = 'none';
+    expandBtn.style.display = 'inline';
+  });
+</script>
+
+<script>
+  const menuIcon = document.querySelector('.menu img');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const closeBtn = document.getElementById('closeBtn');
+
+  function openSidebar() {
+    sidebar.style.left = '0';
+    overlay.style.display = 'block';
+  }
+
+  function closeSidebar() {
+    sidebar.style.left = '-260px';
+    overlay.style.display = 'none';
+  }
+
+  menuIcon.addEventListener('click', openSidebar);
+  closeBtn.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+</script>
+
+<script>
+  const tipElement = document.getElementById("tip-text");
+  const tipMessage = `💡 Tip: For code review, press Ctrl + Alt + G or open the code editor here: Open router test`;
+
+  const folderLink = "Open router test/editor.html"; 
+
+  let i = 0;
+  const speed = 35;
+
+  function typeTip() {
+    if (i < tipMessage.length) {
+      tipElement.innerHTML += tipMessage.charAt(i);
+      i++;
+      setTimeout(typeTip, speed);
+    } else {
+      tipElement.innerHTML = tipElement.innerHTML.replace(
+        "Open router test",
+        `<a href="${folderLink}" target="_blank" style="color:#00eaff;text-decoration:underline;">Open router test</a>`
+      );
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", typeTip);
+
+  // ✅ Add shortcut to go to editor on Ctrl + Alt + G
+  document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "g") {
+      e.preventDefault();
+      window.location.href = folderLink;
+    }
+  });
+</script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Galorem AI - Loading</title>
+  <link rel="stylesheet" href="loading_dashboard.css" />
+</head>
+<body>
+  <!-- Matrix Background -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- Center Hex + Bars -->
+  <div class="hexagon-container">
+    <svg class="hexagon" viewBox="0 0 200 200">
+      <polygon points="100,10 190,55 190,145 100,190 10,145 10,55" />
+    </svg>
+
+    <div class="sound-wave">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+  </div>
+
+  <script src="loading_dashboard.js"></script>
+</body>
+</html>

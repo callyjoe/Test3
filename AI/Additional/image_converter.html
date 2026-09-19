@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image to PDF Notes</title>
+  <link rel="stylesheet" href="image_converter.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Convert Image Notes to Structured PDF</h1>
+
+    <div id="drop-area">
+      <p>Drag & drop image here or click to upload</p>
+      <input type="file" id="fileElem" accept="image/*">
+    </div>
+
+    <div id="loading" class="hidden">
+      <div class="loader"></div>
+      <p>Processing image and refining text with AI...</p>
+    </div>
+
+    <div id="output-section" class="hidden">
+      <h3>Extracted & Refined Text</h3>
+      <textarea id="refinedText" rows="20"></textarea>
+      <button id="generate-word">Generate Doc</button>
+    </div>
+  </div>
+
+  <script src="../api.js" type="module"></script> 
+  <script src="image_converter.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Galorem AI - Auth</title>
+  <link rel="stylesheet" href="signup.css" />
+</head>
+<body>
+
+<div class="main">
+  <div class="image-container">
+    <img src="ChatGPT_Image_Jul_5__2025__07_24_00_AM-removebg.png" alt="AI Bot" />
+  </div>
+
+  <div class="auth-container">
+    
+    <!-- Signup Form -->
+    <div class="form-panel signup-panel active-panel">
+      <div class="top-img" id="topImg">
+        <h2 id="topHeading">Create Your Account</h2>
+        <img id="topImage" src="ChatGPT_Image_Jul_5__2025__07_24_00_AM-removebg.png" alt="AI Bot" />
+      </div>
+
+      <form id="signupForm" novalidate>
+    <input type="text" id="username" placeholder="Username" required />
+    <div class="error" id="usernameError"></div>
+
+    <input type="email" id="email" placeholder="Email Address" required />
+    <div class="error" id="emailError"></div>
+
+    <input type="tel" id="phone" placeholder="Phone Number" required />
+    <div class="error" id="phoneError"></div>
+
+    <input type="password" id="password" placeholder="Password" required />
+    <div id="passwordStrength"></div>
+    <div class="error" id="passwordError"></div>
+
+    <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+    <div class="error" id="confirmError"></div>
+
+    <!-- NEW FIELDS -->
+    <select id="school" required>
+        <option value="" disabled selected>Select your University / School</option>
+        <option value="University of Energy and Natural Resources">UENR</option>
+        <option value="Kwame Nkrumah University of Science and Technology (KNUST)">KNUST</option>
+        <option value="University of Ghana (UG)">University of Ghana</option>
+        <option value="University of Cape Coast (UCC)">UCC</option>
+        <option value="General Purpose">General Purpose</option>
+    </select>
+    <div class="error" id="schoolError"></div>
+
+    <select id="department" required>
+    <option value="" disabled selected>Select Department</option>
+</select>
+<div class="error" id="departmentError"></div>
+
+    <label class="terms">
+        <input type="checkbox" id="terms" required />
+        <a href="privacy.html" target="_blank">I agree to the Terms and Conditions</a>
+        <a href="#" id="to-login">I already have an account</a>
+    </label>
+    <div class="error" id="termsError"></div>
+
+    <button type="submit">Sign Up</button>
+    <p>© 2025 Galorem AI | Developed by The Code Tribe</p>
+</form>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-panel login-panel">
+      <div class="top-login">
+        <img src="ChatGPT_Image_Jul_5__2025__07_24_00_AM-removebg.png" />
+        <h2>Welcome Back</h2>
+      </div>
+      <form id="loginForm" novalidate>
+        <input type="email" id="loginEmail" placeholder="Email Address" required />
+        <input type="password" id="loginPassword" placeholder="Password" required />
+        <button type="submit">Log In</button>
+        <p>© 2025 Galorem AI | Developed by The Code Tribe</p>
+        <a href="#" id="to-signup">Don't have an account?</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>🎉 Registration Successful!</h2>
+    <p>Welcome to Galorem AI. You can now log in and explore.</p>
+    <button id="goToLogin">Go to Login</button>
+  </div>
+</div>
+
+<!-- Error Modal -->
+<div id="errorModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>⚠️ Error</h2>
+    <p id="errorMsg">Something went wrong.</p>
+  </div>
+</div>
+
+<!-- Keep everything else in your original HTML above this -->
+<script>
+// Form Switching
+const signupPanel = document.querySelector(".signup-panel");
+const loginPanel = document.querySelector(".login-panel");
+
+document.getElementById("to-login").addEventListener("click", (e) => {
+  e.preventDefault();
+  signupPanel.classList.remove("active-panel");
+  loginPanel.classList.add("active-panel");
+});
+
+document.getElementById("to-signup").addEventListener("click", (e) => {
+  e.preventDefault();
+  loginPanel.classList.remove("active-panel");
+  signupPanel.classList.add("active-panel");
+});
+
+// Top Image Animation on Mobile
+function animateTopImageOnMobile() {
+  const topImg = document.getElementById("topImg");
+  if (window.innerWidth <= 937) {
+    topImg.classList.add("animate-in");
+  } else {
+    topImg.classList.remove("animate-in");
+  }
+}
+window.addEventListener("load", animateTopImageOnMobile);
+window.addEventListener("resize", animateTopImageOnMobile);
+
+// Signup Form Logic
+const form = document.getElementById('signupForm');
+const username = document.getElementById('username');
+const email = document.getElementById('email');
+const phone = document.getElementById('phone');
+const password = document.getElementById('password');
+const confirmPassword = document.getElementById('confirmPassword');
+const school = document.getElementById('school');
+const department = document.getElementById('department');
+const schoolError = document.getElementById('schoolError');
+const departmentError = document.getElementById('departmentError');
+const terms = document.getElementById('terms');
+
+const usernameError = document.getElementById('usernameError');
+const emailError = document.getElementById('emailError');
+const phoneError = document.getElementById('phoneError');
+const passwordError = document.getElementById('passwordError');
+const confirmError = document.getElementById('confirmError');
+const termsError = document.getElementById('termsError');
+const passwordStrength = document.getElementById('passwordStrength');
+
+const successModal = document.getElementById("successModal");
+const errorModal = document.getElementById("errorModal");
+const errorMsg = document.getElementById("errorMsg");
+const closeBtns = document.querySelectorAll(".close-btn");
+
+closeBtns.forEach(btn => {
+  btn.onclick = () => {
+    successModal.style.display = "none";
+    errorModal.style.display = "none";
+  };
+});
+window.onclick = (event) => {
+  if (event.target === successModal || event.target === errorModal) {
+    successModal.style.display = "none";
+    errorModal.style.display = "none";
+  }
+};
+
+password.addEventListener('input', () => {
+  const value = password.value;
+  let strength = '';
+  if (value.length < 6) {
+    strength = 'Too short';
+    passwordStrength.style.color = 'orange';
+  } else if (!/[A-Z]/.test(value) || !/[0-9]/.test(value) || !/[\W_]/.test(value)) {
+    strength = 'Weak';
+    passwordStrength.style.color = 'red';
+  } else {
+    strength = 'Strong';
+    passwordStrength.style.color = 'limegreen';
+  }
+  passwordStrength.textContent = `Password strength: ${strength}`;
+});
+
+// Real-time Ghana phone formatting
+phone.addEventListener('input', () => {
+  let input = phone.value.replace(/\D/g, '');
+
+  if (input.startsWith('233') && input.length > 3) {
+    input = '+' + input;
+  }
+
+  if (input.startsWith('+233') && input.length > 6) {
+    phone.value = input.replace(/^(\+233)(\d{2})(\d{3})(\d{4}).*/, '$1 $2 $3 $4');
+  } else if (input.length >= 10) {
+    phone.value = input.replace(/^(\d{3})(\d{3})(\d{4}).*/, '$1 $2 $3');
+  } else {
+    phone.value = input;
+  }
+});
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  let isValid = true;
+
+  [username, email, phone, password, confirmPassword].forEach(i => i.classList.remove('invalid'));
+  [usernameError, emailError, phoneError, passwordError, confirmError, termsError].forEach(err => err.style.display = 'none');
+
+  if (/\d/.test(username.value.trim()) || username.value.trim() === '') {
+    usernameError.textContent = 'Username must not contain numbers.';
+    usernameError.style.display = 'block';
+    username.classList.add('invalid');
+    isValid = false;
+  }
+
+  if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email.value.trim())) {
+    emailError.textContent = 'Please enter a valid Gmail address.';
+    emailError.style.display = 'block';
+    email.classList.add('invalid');
+    isValid = false;
+  }
+
+  // Ghana phone number validation
+  const rawPhone = phone.value.trim().replace(/\s+/g, '');
+  const validPrefixes = ['024', '054', '055', '059', '025', '027', '057', '026'];
+  let isValidPhone = false;
+
+  if (rawPhone.startsWith('+233') && rawPhone.length === 13) {
+    const prefix = rawPhone.substring(4, 7);
+    isValidPhone = validPrefixes.includes(prefix);
+  } else if (rawPhone.length === 10 && validPrefixes.includes(rawPhone.substring(0, 3))) {
+    isValidPhone = true;
+  }
+
+  if (!isValidPhone) {
+    phoneError.textContent = 'Enter a valid Ghanaian number start with the right format(e.g. 055 385 9912 or +233 55 385 9912)';
+    phoneError.style.display = 'block';
+    phone.classList.add('invalid');
+    isValid = false;
+  }
+
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password.value)) {
+    passwordError.textContent = 'Password must be 8+ chars, upper, lower, number & special char.';
+    passwordError.style.display = 'block';
+    password.classList.add('invalid');
+    isValid = false;
+  }
+
+  if (confirmPassword.value !== password.value) {
+    confirmError.textContent = 'Passwords do not match.';
+    confirmError.style.display = 'block';
+    confirmPassword.classList.add('invalid');
+    isValid = false;
+  }
+  // School validation
+if (!school.value) {
+    schoolError.textContent = 'Please select your school.';
+    schoolError.style.display = 'block';
+    school.classList.add('invalid');
+    isValid = false;
+} else {
+    schoolError.style.display = 'none';
+    school.classList.remove('invalid');
+}
+
+// Department validation
+if (!department.value.trim()) {
+    departmentError.textContent = 'Please enter your department.';
+    departmentError.style.display = 'block';
+    department.classList.add('invalid');
+    isValid = false;
+} else {
+    departmentError.style.display = 'none';
+    department.classList.remove('invalid');
+}
+  if (!terms.checked) {
+    termsError.textContent = 'You must agree to the terms.';
+    termsError.style.display = 'block';
+    isValid = false;
+  }
+
+  if (isValid) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'signup.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        const res = JSON.parse(this.responseText);
+        if (res.status === 'success') {
+            successModal.style.display = 'block';
+            form.reset();
+            passwordStrength.textContent = "";
+            const goToLogin = document.getElementById("goToLogin");
+            goToLogin.onclick = () => {
+                successModal.style.display = "none";
+                signupPanel.classList.remove("active-panel");
+                loginPanel.classList.add("active-panel");
+            };
+        } else {
+            errorMsg.textContent = res.message;
+            errorModal.style.display = 'block';
+        }
+    };
+    xhr.send(`username=${encodeURIComponent(username.value.trim())}&email=${encodeURIComponent(email.value.trim())}&phone=${encodeURIComponent(phone.value.trim())}&password=${encodeURIComponent(password.value)}&school=${encodeURIComponent(school.value)}&department=${encodeURIComponent(department.value)}`);
+}
+});
+
+// Login Logic
+const loginForm = document.getElementById('loginForm');
+loginForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'login.php', true);
+  xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhr.onload = function () {
+    const res = JSON.parse(this.responseText);
+    if (res.status === 'success') {
+      window.location.href = "loading_dashboard.html";
+    } else {
+      errorMsg.textContent = res.message;
+      errorModal.style.display = 'block';
+    }
+  };
+  xhr.send(`email=${email}&password=${password}`);
+});
+
+document.getElementById('school').addEventListener('change', function() {
+    const school = this.value;
+    const deptSelect = document.getElementById('department');
+    if (!school) {
+        deptSelect.innerHTML = '<option value="" disabled selected>Select Department</option>';
+        return;
+    }
+    // Show loading
+    deptSelect.innerHTML = '<option value="" disabled selected>Loading...</option>';
+    fetch(`get_departments.php?school=${encodeURIComponent(school)}`)
+        .then(response => response.json())
+        .then(data => {
+            deptSelect.innerHTML = '<option value="" disabled selected>Select Department</option>';
+            data.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept;
+                option.textContent = dept;
+                deptSelect.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error('Failed to load departments', err);
+            deptSelect.innerHTML = '<option value="" disabled selected>Error loading departments</option>';
+        });
+});
+</script>
+
+
+</body>
+</html>
